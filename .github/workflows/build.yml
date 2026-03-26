@@ -1,0 +1,55 @@
+name: Build m68k-elf toolchain
+
+on:
+  push:
+    paths:
+      - 'build.sh'
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build toolchain
+        run: bash build.sh "$HOME/m68k-elf-toolchain"
+
+      - name: Verify toolchain
+        run: |
+          export PATH="$HOME/m68k-elf-toolchain/bin:$PATH"
+          make verify PREFIX="$HOME/m68k-elf-toolchain"
+
+      - name: Package
+        run: |
+          tar czf m68k-elf-toolchain-x86_64-linux.tar.gz \
+            -C "$HOME" m68k-elf-toolchain/
+          ls -lh m68k-elf-toolchain-x86_64-linux.tar.gz
+
+      - name: Create/update release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: toolchain-latest
+          name: "m68k-elf toolchain (latest)"
+          body: |
+            Pre-built `m68k-elf-gcc` cross-compiler for the Motorola 68000.
+
+            - GCC 14.2.0 with `--with-cpu=68000`
+            - binutils 2.43
+            - Target: `m68k-elf` (bare metal)
+            - Host: x86_64 Linux (Ubuntu)
+
+            Built from `build.sh` at commit ${{ github.sha }}.
+
+            ## Install
+
+            ```bash
+            bash fetch.sh
+            export PATH=~/m68k-elf-toolchain/bin:$PATH
+            ```
+          files: m68k-elf-toolchain-x86_64-linux.tar.gz
+          make_latest: true
