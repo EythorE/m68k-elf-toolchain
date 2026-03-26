@@ -15,7 +15,7 @@ base 68000 instructions. This is critical for hardware like the Sega Mega Drive
 | GMP        | 6.2.1   |
 | MPFR       | 4.2.1   |
 | MPC        | 1.3.1   |
-| GDB        | 15.2 (optional) |
+| GDB        | 15.2 |
 
 ## Quick start
 
@@ -43,12 +43,6 @@ bash build.sh /opt/m68k-elf
 bash fetch.sh /opt/m68k-elf
 ```
 
-### Build with GDB
-
-```bash
-BUILD_GDB=1 bash build.sh
-```
-
 ## Verify
 
 Check that the installed toolchain is correct and contains no 68020 instructions:
@@ -72,7 +66,7 @@ the full explanation.
 
 The GitHub Actions workflow (`.github/workflows/build.yml`) builds the toolchain
 on every push to `build.sh` and uploads a tarball to the `toolchain-latest`
-release.
+release. The default build includes `m68k-elf-gdb`, and CI verifies it is present.
 
 ## License
 

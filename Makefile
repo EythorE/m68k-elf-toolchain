@@ -13,10 +13,9 @@ help:
 	@echo ""
 	@echo "Options:"
 	@echo "  PREFIX=<path>   Install location (default: ~/m68k-elf-toolchain)"
-	@echo "  BUILD_GDB=1     Also build GDB (default: off)"
 	@echo ""
 	@echo "Example:"
-	@echo "  make build PREFIX=/opt/m68k-elf BUILD_GDB=1"
+	@echo "  make build PREFIX=/opt/m68k-elf"
 
 fetch:
 	bash fetch.sh $(PREFIX)
@@ -39,6 +38,7 @@ verify:
 	@echo "Checking binutils..."
 	@$(PREFIX)/bin/m68k-elf-as --version | head -1
 	@$(PREFIX)/bin/m68k-elf-ld --version | head -1
+	@$(PREFIX)/bin/m68k-elf-gdb --version | head -1
 	@echo ""
 	@echo "All checks passed."
 
